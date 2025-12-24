@@ -57,6 +57,12 @@ export const PlanCard: React.FC<PlanCardProps> = ({ plan, onCompare, isSelectedF
             </ul>
           </div>
         </div>
+        
+        <div className="mt-auto pt-4 border-t border-slate-100">
+          <p className="text-xs text-slate-400">
+            Last verified: {plan.lastVerified}
+          </p>
+        </div>
       </div>
 
       <div className="p-4 bg-slate-50 border-t border-slate-100 flex gap-3">

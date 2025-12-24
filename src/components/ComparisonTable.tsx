@@ -103,6 +103,16 @@ export const ComparisonTable: React.FC<ComparisonTableProps> = ({ plans }) => {
               </td>
             ))}
           </tr>
+
+          {/* Last Verified */}
+           <tr>
+            <td className="p-4 font-medium text-slate-700 text-xs">Last Verified</td>
+            {plans.map(plan => (
+              <td key={plan.id} className="p-4 text-xs text-slate-500">
+                {plan.lastVerified}
+              </td>
+            ))}
+          </tr>
           
           {/* Footer Actions */}
           <tr className="bg-slate-50">

@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { plans, PaymentType } from '@/data/plans';
 import { PlanCard } from '@/components/PlanCard';
 import { ComparisonTable } from '@/components/ComparisonTable';
@@ -8,44 +9,75 @@ import { Filters } from '@/components/Filters';
 import { EducationalContent } from '@/components/EducationalContent';
 import { Button } from '@/components/ui/Button';
 import { ShieldCheck, X } from 'lucide-react';
+import { useAnalytics } from '@/lib/analytics';
 
-export default function Home() {
-  // Filter States
-  const [maxPrice, setMaxPrice] = useState<number>(50);
-  const [paymentTypes, setPaymentTypes] = useState<PaymentType[]>(['Up-front', 'Reimbursement']);
-  const [stateFilter, setStateFilter] = useState<string>('ALL');
+function HomeContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { trackEvent } = useAnalytics();
 
-  // Comparison State
-  const [selectedPlanIds, setSelectedPlanIds] = useState<string[]>([]);
+  // Initialize state from URL or defaults
+  const [maxPrice, setMaxPrice] = useState<number>(() => {
+    const p = searchParams.get('maxPrice');
+    return p ? Number(p) : 50;
+  });
+  
+  const [paymentTypes, setPaymentTypes] = useState<PaymentType[]>(() => {
+    const p = searchParams.get('paymentTypes');
+    return p ? (p.split(',') as PaymentType[]) : ['Up-front', 'Reimbursement'];
+  });
+
+  const [stateFilter, setStateFilter] = useState<string>(() => {
+    return searchParams.get('state') || 'ALL';
+  });
+
+  const [selectedPlanIds, setSelectedPlanIds] = useState<string[]>(() => {
+    const p = searchParams.get('compare');
+    return p ? p.split(',') : [];
+  });
+
+  // Sync state to URL
+  useEffect(() => {
+    const params = new URLSearchParams();
+    params.set('maxPrice', maxPrice.toString());
+    if (paymentTypes.length > 0) params.set('paymentTypes', paymentTypes.join(','));
+    if (stateFilter !== 'ALL') params.set('state', stateFilter);
+    if (selectedPlanIds.length > 0) params.set('compare', selectedPlanIds.join(','));
+
+    router.replace(`?${params.toString()}`, { scroll: false });
+  }, [maxPrice, paymentTypes, stateFilter, selectedPlanIds, router]);
 
   // Filter Logic
   const filteredPlans = useMemo(() => {
     return plans.filter(plan => {
-      // Price Filter
       if (plan.price > maxPrice) return false;
-
-      // Payment Type Filter
       if (paymentTypes.length > 0 && !paymentTypes.includes(plan.paymentType.value)) return false;
-
-      // State Filter
       if (stateFilter !== 'ALL') {
-         // Logic: if plan excludes specific states
          if (plan.stateAvailability.startsWith('Excludes')) {
              if (plan.stateAvailability.includes(stateFilter)) return false;
          }
-         // If regional, we'd need more logic, but for MVP/mock data:
-         // Assuming "Regional" means not everywhere, but for this mock we treat as available unless excluded
       }
-
       return true;
     });
   }, [maxPrice, paymentTypes, stateFilter]);
 
   // Handlers
-  const togglePaymentType = (type: PaymentType) => {
-    setPaymentTypes(prev => 
-      prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
-    );
+  const handleSetMaxPrice = (val: number) => {
+    setMaxPrice(val);
+    trackEvent({ action: 'filter_used', category: 'price', value: val });
+  };
+
+  const handleTogglePaymentType = (type: PaymentType) => {
+    setPaymentTypes(prev => {
+      const next = prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type];
+      trackEvent({ action: 'filter_used', category: 'payment_type', label: next.join(',') });
+      return next;
+    });
+  };
+
+  const handleSetStateFilter = (state: string) => {
+    setStateFilter(state);
+    trackEvent({ action: 'filter_used', category: 'state', label: state });
   };
 
   const toggleCompare = (id: string) => {
@@ -57,6 +89,7 @@ export default function Home() {
         alert("You can compare up to 3 plans at a time.");
         return prev;
       }
+      trackEvent({ action: 'compare_viewed', label: id });
       return [...prev, id];
     });
   };
@@ -93,11 +126,11 @@ export default function Home() {
             <div className="sticky top-8">
               <Filters 
                 maxPrice={maxPrice}
-                setMaxPrice={setMaxPrice}
+                setMaxPrice={handleSetMaxPrice}
                 paymentTypes={paymentTypes}
-                togglePaymentType={togglePaymentType}
+                togglePaymentType={handleTogglePaymentType}
                 stateFilter={stateFilter}
-                setStateFilter={setStateFilter}
+                setStateFilter={handleSetStateFilter}
                 onReset={() => {
                   setMaxPrice(100);
                   setPaymentTypes(['Up-front', 'Reimbursement']);
@@ -205,5 +238,13 @@ export default function Home() {
         </div>
       </footer>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-50 flex items-center justify-center">Loading...</div>}>
+      <HomeContent />
+    </Suspense>
   );
 }
