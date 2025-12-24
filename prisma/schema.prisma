@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Provider {
+  id              String   @id @default(uuid())
+  name            String
+  slug            String   @unique
+  website_url     String
+  logo_url        String?
+  summary_short   String?
+  summary_long    String?
+  disclosure_notes String?
+  is_active       Boolean  @default(true)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  plans Plan[]
+}
+
+model Plan {
+  id              String   @id @default(uuid())
+  provider_id     String
+  provider        Provider @relation(fields: [provider_id], references: [id])
+  name            String
+  slug            String   @unique
+  
+  price_monthly   Decimal?
+  price_annual    Decimal?
+  
+  // Enums mapped to String for SQLite
+  // payment_style: upfront | reimbursement | mixed | unknown
+  payment_style   String   @default("unknown")
+  
+  // attorney_choice: yes | limited | no | unknown
+  attorney_choice String   @default("unknown")
+  
+  waiting_period_days Int?
+  
+  // coverage_type: criminal | civil | both | unknown
+  coverage_type   String   @default("unknown")
+  
+  // family_coverage: yes | limited | no | unknown
+  family_coverage String   @default("unknown")
+  
+  coverage_notes  String?
+  exclusions_notes String?
+  
+  // Stored as JSON strings
+  support_features String? 
+  limits_json      String? 
+  availability_json String? 
+  
+  affiliate_url    String?
+  cta_label        String?  @default("Visit Provider")
+  is_featured      Boolean  @default(false)
+  sponsored_rank_position Int?
+  
+  overall_score    Decimal?
+  score_breakdown_json String? 
+  
+  last_verified_at DateTime?
+  is_active        Boolean  @default(true)
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  sources    Source[]
+  changeLogs ChangeLog[]
+}
+
+model Source {
+  id          String   @id @default(uuid())
+  plan_id     String
+  plan        Plan     @relation(fields: [plan_id], references: [id])
+  url         String
+  title       String?
+  note        String?
+  captured_at DateTime @default(now())
+}
+
+model ChangeLog {
+  id         String   @id @default(uuid())
+  plan_id    String
+  plan       Plan     @relation(fields: [plan_id], references: [id])
+  changed_at DateTime @default(now())
+  changed_by String?
+  summary    String?
+  diff_json  String? // Stored as JSON string
+}
