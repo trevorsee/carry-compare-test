@@ -364,6 +364,19 @@ input[type="range"] {
   align-items: center;
 }
 
+.actionBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 220px;
+}
+
+.actionNote {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
 .mutedHr {
   border: none;
   border-top: 1px solid var(--border);

@@ -1,0 +1,376 @@
+{
+  "meta": {
+    "datasetName": "MVP sample dataset",
+    "datasetDisclaimer": "This dataset is intentionally sample/demo. Replace with verified plan data and citations before publishing.",
+    "lastUpdated": "2025-12-24",
+    "orderingPolicy": {
+      "type": "neutral",
+      "description": "Default ordering is alphabetical by provider/plan. Sponsored placement is not used in MVP ordering."
+    }
+  },
+  "taxonomies": {
+    "paymentModels": [
+      { "id": "upfront", "label": "Up-front payment" },
+      { "id": "reimbursement", "label": "Reimbursement" },
+      { "id": "hybrid", "label": "Hybrid / conditional" },
+      { "id": "unknown", "label": "Unknown" }
+    ],
+    "attorneyChoice": [
+      { "id": "member_choice", "label": "You choose (with conditions)" },
+      { "id": "network_required", "label": "Network / approved list required" },
+      { "id": "assigned", "label": "Assigned / provider chooses" },
+      { "id": "unknown", "label": "Unknown" }
+    ],
+    "familyCoverage": [
+      { "id": "included", "label": "Included" },
+      { "id": "add_on", "label": "Add-on option" },
+      { "id": "not_available", "label": "Not available" },
+      { "id": "unknown", "label": "Unknown" }
+    ]
+  },
+  "themes": [
+    {
+      "id": "cost",
+      "label": "Cost",
+      "attributes": [
+        {
+          "id": "monthly_price_usd",
+          "label": "Monthly price",
+          "description": "Listed monthly price for the plan level being compared.",
+          "type": "money"
+        },
+        {
+          "id": "annual_price_usd",
+          "label": "Annual price",
+          "description": "Listed annual price (if offered) for the plan level being compared.",
+          "type": "money"
+        }
+      ]
+    },
+    {
+      "id": "payment",
+      "label": "How costs get paid",
+      "attributes": [
+        {
+          "id": "payment_model",
+          "label": "Payment model",
+          "description": "Whether the plan tends to pay costs up-front vs reimburse later (subject to terms).",
+          "type": "enum:paymentModels"
+        },
+        {
+          "id": "payment_notes",
+          "label": "Payment notes",
+          "description": "Plain-language notes on approvals, reimbursement conditions, and timing (when known).",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "attorney",
+      "label": "Attorney choice",
+      "attributes": [
+        {
+          "id": "attorney_choice",
+          "label": "Attorney choice",
+          "description": "Whether you can choose counsel, must use a network, or are assigned (may vary by situation).",
+          "type": "enum:attorneyChoice"
+        },
+        {
+          "id": "attorney_notes",
+          "label": "Attorney notes",
+          "description": "Conditions like approval, rate caps, network limitations, or reimbursement mechanics.",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "household",
+      "label": "Household",
+      "attributes": [
+        {
+          "id": "family_coverage",
+          "label": "Family coverage",
+          "description": "Whether spouse/household coverage is included or available (varies by plan).",
+          "type": "enum:familyCoverage"
+        }
+      ]
+    },
+    {
+      "id": "coverage",
+      "label": "Coverage (high-level)",
+      "attributes": [
+        {
+          "id": "criminal_defense",
+          "label": "Criminal defense support",
+          "description": "Whether the plan indicates it supports criminal defense costs (details vary).",
+          "type": "text"
+        },
+        {
+          "id": "civil_defense",
+          "label": "Civil defense support",
+          "description": "Whether the plan indicates it supports civil defense costs (details vary).",
+          "type": "text"
+        },
+        {
+          "id": "appeals",
+          "label": "Appeals support",
+          "description": "Whether appeals are included and under what conditions (often limited).",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "exclusions",
+      "label": "Exclusions & caveats",
+      "attributes": [
+        {
+          "id": "waiting_period",
+          "label": "Waiting period",
+          "description": "Any stated waiting period before benefits apply.",
+          "type": "text"
+        },
+        {
+          "id": "common_exclusions",
+          "label": "Common exclusions (examples)",
+          "description": "A short list of notable exclusions/caveats from available sources.",
+          "type": "list"
+        }
+      ]
+    },
+    {
+      "id": "support",
+      "label": "Support & process",
+      "attributes": [
+        {
+          "id": "hotline",
+          "label": "Emergency hotline",
+          "description": "Whether the plan advertises a 24/7 hotline or similar support.",
+          "type": "text"
+        },
+        {
+          "id": "claim_process_notes",
+          "label": "Process notes",
+          "description": "What to do first, notification requirements, approvals, and other process caveats.",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "transparency",
+      "label": "Transparency",
+      "attributes": [
+        {
+          "id": "public_docs",
+          "label": "Public docs available",
+          "description": "Whether a plan’s written terms/contract/policy is publicly available from sources.",
+          "type": "text"
+        }
+      ]
+    }
+  ],
+  "plans": [
+    {
+      "id": "alpha-basic",
+      "provider": { "name": "Alpha Legal Defense", "website": "https://example.com/alpha" },
+      "planName": "Basic",
+      "isSponsored": false,
+      "isSample": true,
+      "bestFor": [
+        "Budget-conscious shoppers who want a simple starting point",
+        "People who prioritize a low monthly cost over detailed disclosures"
+      ],
+      "notIdealIf": [
+        "You want detailed written disclosures up front",
+        "You need clear information about appeals/civil coverage"
+      ],
+      "actions": [
+        {
+          "id": "visit",
+          "label": "Visit provider site",
+          "url": "https://example.com/alpha/basic",
+          "kind": "visit_provider",
+          "isSponsored": false,
+          "whatHappens": "You’ll leave this tool and visit the provider’s site."
+        }
+      ],
+      "availability": {
+        "status": "unknown",
+        "statesIncluded": [],
+        "statesExcluded": [],
+        "note": "State availability not clearly disclosed in sources."
+      },
+      "fields": {
+        "monthly_price_usd": {
+          "status": "known",
+          "value": 19.99,
+          "note": "Listed as monthly price for Basic tier.",
+          "sources": [{ "title": "Alpha pricing page (Basic)", "url": "https://example.com/alpha/pricing" }],
+          "lastVerified": "2025-12-01"
+        },
+        "annual_price_usd": { "status": "not_disclosed", "note": "Annual billing option not disclosed.", "sources": [], "lastVerified": "2025-12-01" },
+        "payment_model": {
+          "status": "unknown",
+          "note": "Not clearly stated whether costs are paid up-front vs reimbursed.",
+          "sources": [{ "title": "Alpha FAQ", "url": "https://example.com/alpha/faq" }],
+          "lastVerified": "2025-12-01"
+        },
+        "payment_notes": { "status": "unknown", "note": "No clear process details found.", "sources": [], "lastVerified": "2025-12-01" },
+        "attorney_choice": {
+          "status": "not_disclosed",
+          "note": "Attorney choice details not disclosed clearly.",
+          "sources": [{ "title": "Alpha plan overview", "url": "https://example.com/alpha/overview" }],
+          "lastVerified": "2025-12-01"
+        },
+        "attorney_notes": { "status": "unknown", "note": "No clear limits/caps disclosed.", "sources": [], "lastVerified": "2025-12-01" },
+        "family_coverage": { "status": "known", "value": "not_available", "note": "Sample classification for MVP dataset.", "sources": [], "lastVerified": "2025-12-01" },
+        "criminal_defense": { "status": "known", "value": "Advertises coverage for criminal defense (details unclear).", "sources": [{ "title": "Alpha overview", "url": "https://example.com/alpha/overview" }], "lastVerified": "2025-12-01" },
+        "civil_defense": { "status": "unknown", "note": "Civil defense support not clearly stated.", "sources": [], "lastVerified": "2025-12-01" },
+        "appeals": { "status": "unknown", "note": "Appeals not clearly stated.", "sources": [], "lastVerified": "2025-12-01" },
+        "waiting_period": { "status": "unknown", "note": "Waiting period not disclosed.", "sources": [], "lastVerified": "2025-12-01" },
+        "common_exclusions": {
+          "status": "unknown",
+          "note": "Exclusions not disclosed in a searchable list.",
+          "sources": [],
+          "lastVerified": "2025-12-01"
+        },
+        "hotline": { "status": "known", "value": "24/7 hotline advertised.", "sources": [{ "title": "Alpha contact", "url": "https://example.com/alpha/contact" }], "lastVerified": "2025-12-01" },
+        "claim_process_notes": { "status": "unknown", "note": "Notification requirements not clearly disclosed.", "sources": [], "lastVerified": "2025-12-01" },
+        "public_docs": { "status": "not_disclosed", "note": "No public contract/policy document found.", "sources": [], "lastVerified": "2025-12-01" }
+      }
+    },
+    {
+      "id": "bravo-standard",
+      "provider": { "name": "Bravo Shield", "website": "https://example.com/bravo" },
+      "planName": "Standard",
+      "isSponsored": true,
+      "isSample": true,
+      "bestFor": ["Users who want clearer attorney-choice disclosures", "People who value written documentation availability"],
+      "notIdealIf": ["You need the lowest possible monthly price", "You prefer assigned counsel rather than choosing"],
+      "actions": [
+        {
+          "id": "visit",
+          "label": "Visit provider site",
+          "url": "https://example.com/bravo/standard",
+          "kind": "visit_provider",
+          "isSponsored": true,
+          "whatHappens": "You’ll leave this tool and visit the provider’s site (sponsored link)."
+        }
+      ],
+      "availability": {
+        "status": "known",
+        "statesIncluded": ["TX", "FL", "AZ", "TN"],
+        "statesExcluded": [],
+        "note": "Sample availability list for MVP demonstration."
+      },
+      "fields": {
+        "monthly_price_usd": {
+          "status": "known",
+          "value": 34.0,
+          "note": "Listed monthly price for Standard tier.",
+          "sources": [{ "title": "Bravo pricing", "url": "https://example.com/bravo/pricing" }],
+          "lastVerified": "2025-12-10"
+        },
+        "annual_price_usd": { "status": "known", "value": 360.0, "note": "Annual billing option advertised.", "sources": [{ "title": "Bravo pricing", "url": "https://example.com/bravo/pricing" }], "lastVerified": "2025-12-10" },
+        "payment_model": {
+          "status": "known",
+          "value": "hybrid",
+          "note": "Advertises direct payment in some situations and reimbursement in others (details vary).",
+          "sources": [{ "title": "Bravo FAQ: payment", "url": "https://example.com/bravo/faq#payment" }],
+          "lastVerified": "2025-12-10"
+        },
+        "payment_notes": { "status": "known", "value": "Requires notification and approval for certain expenses; timing varies by situation.", "sources": [{ "title": "Bravo FAQ: payment", "url": "https://example.com/bravo/faq#payment" }], "lastVerified": "2025-12-10" },
+        "attorney_choice": {
+          "status": "known",
+          "value": "member_choice",
+          "note": "Member can choose an attorney, subject to plan process and any stated limits.",
+          "sources": [{ "title": "Bravo attorney choice page", "url": "https://example.com/bravo/attorneys" }],
+          "lastVerified": "2025-12-10"
+        },
+        "attorney_notes": { "status": "known", "value": "May require approval and may have rate limits; details should be verified in written terms.", "sources": [{ "title": "Bravo attorney choice page", "url": "https://example.com/bravo/attorneys" }], "lastVerified": "2025-12-10" },
+        "family_coverage": { "status": "known", "value": "add_on", "note": "Sample classification for MVP dataset.", "sources": [], "lastVerified": "2025-12-10" },
+        "criminal_defense": { "status": "known", "value": "Advertises criminal defense support.", "sources": [{ "title": "Bravo plan details", "url": "https://example.com/bravo/standard/details" }], "lastVerified": "2025-12-10" },
+        "civil_defense": { "status": "known", "value": "Advertises civil defense support (scope unclear).", "sources": [{ "title": "Bravo plan details", "url": "https://example.com/bravo/standard/details" }], "lastVerified": "2025-12-10" },
+        "appeals": { "status": "not_disclosed", "note": "Appeals terms not disclosed in marketing pages.", "sources": [], "lastVerified": "2025-12-10" },
+        "waiting_period": { "status": "known", "value": "30 days (sample).", "note": "Demonstration value for MVP.", "sources": [{ "title": "Bravo terms summary", "url": "https://example.com/bravo/terms" }], "lastVerified": "2025-12-10" },
+        "common_exclusions": {
+          "status": "known",
+          "value": ["Illegal carry circumstances (sample)", "Intentional criminal acts (sample)", "Failure to notify (sample)"],
+          "note": "Sample exclusions list for MVP demonstration.",
+          "sources": [{ "title": "Bravo terms summary", "url": "https://example.com/bravo/terms" }],
+          "lastVerified": "2025-12-10"
+        },
+        "hotline": { "status": "known", "value": "24/7 hotline advertised.", "sources": [{ "title": "Bravo contact", "url": "https://example.com/bravo/contact" }], "lastVerified": "2025-12-10" },
+        "claim_process_notes": { "status": "known", "value": "Notify as soon as possible; pre-approval required for some expenses.", "sources": [{ "title": "Bravo terms summary", "url": "https://example.com/bravo/terms" }], "lastVerified": "2025-12-10" },
+        "public_docs": { "status": "known", "value": "Summary terms publicly available (full contract unclear).", "sources": [{ "title": "Bravo terms summary", "url": "https://example.com/bravo/terms" }], "lastVerified": "2025-12-10" }
+      }
+    },
+    {
+      "id": "charlie-family",
+      "provider": { "name": "Charlie Coverage Co.", "website": "https://example.com/charlie" },
+      "planName": "Family",
+      "isSponsored": false,
+      "isSample": true,
+      "bestFor": ["Households seeking explicit family coverage options", "Users who want a straightforward reimbursement model (if acceptable)"],
+      "notIdealIf": ["You cannot float costs up-front", "You want extensive public documentation"],
+      "actions": [
+        {
+          "id": "request",
+          "label": "Request info",
+          "url": "https://example.com/charlie/request",
+          "kind": "request_info",
+          "isSponsored": false,
+          "whatHappens": "You’ll leave this tool and request more information from the provider."
+        }
+      ],
+      "availability": { "status": "known", "statesIncluded": ["TX", "OK", "NM"], "statesExcluded": ["NY", "CA"], "note": "Sample availability list for MVP demonstration." },
+      "fields": {
+        "monthly_price_usd": { "status": "known", "value": 49.0, "note": "Sample monthly price.", "sources": [{ "title": "Charlie pricing", "url": "https://example.com/charlie/pricing" }], "lastVerified": "2025-11-20" },
+        "annual_price_usd": { "status": "unknown", "note": "Annual option not clearly stated.", "sources": [], "lastVerified": "2025-11-20" },
+        "payment_model": { "status": "known", "value": "reimbursement", "note": "Advertises reimbursement after coverage determination.", "sources": [{ "title": "Charlie FAQ", "url": "https://example.com/charlie/faq" }], "lastVerified": "2025-11-20" },
+        "payment_notes": { "status": "known", "value": "You may need to pay costs up-front and submit for reimbursement; approvals may apply.", "sources": [{ "title": "Charlie FAQ", "url": "https://example.com/charlie/faq" }], "lastVerified": "2025-11-20" },
+        "attorney_choice": { "status": "known", "value": "network_required", "note": "Requires using an approved network (sample).", "sources": [{ "title": "Charlie attorneys", "url": "https://example.com/charlie/attorneys" }], "lastVerified": "2025-11-20" },
+        "attorney_notes": { "status": "known", "value": "If outside network, reimbursement may be limited or denied (sample).", "sources": [{ "title": "Charlie attorneys", "url": "https://example.com/charlie/attorneys" }], "lastVerified": "2025-11-20" },
+        "family_coverage": { "status": "known", "value": "included", "note": "Sample classification for MVP dataset.", "sources": [], "lastVerified": "2025-11-20" },
+        "criminal_defense": { "status": "known", "value": "Advertises criminal defense support.", "sources": [{ "title": "Charlie plan page", "url": "https://example.com/charlie/family" }], "lastVerified": "2025-11-20" },
+        "civil_defense": { "status": "not_disclosed", "note": "Civil coverage not clearly stated.", "sources": [], "lastVerified": "2025-11-20" },
+        "appeals": { "status": "unknown", "note": "Appeals not clearly stated.", "sources": [], "lastVerified": "2025-11-20" },
+        "waiting_period": { "status": "known", "value": "0 days (sample).", "note": "Demonstration value for MVP.", "sources": [{ "title": "Charlie summary", "url": "https://example.com/charlie/summary" }], "lastVerified": "2025-11-20" },
+        "common_exclusions": { "status": "known", "value": ["Conviction may limit benefits (sample)", "Late notice may reduce benefits (sample)"], "sources": [{ "title": "Charlie summary", "url": "https://example.com/charlie/summary" }], "lastVerified": "2025-11-20" },
+        "hotline": { "status": "unknown", "note": "Hotline availability not clearly stated.", "sources": [], "lastVerified": "2025-11-20" },
+        "claim_process_notes": { "status": "known", "value": "Contact provider before retaining counsel where possible; keep receipts for reimbursement.", "sources": [{ "title": "Charlie FAQ", "url": "https://example.com/charlie/faq" }], "lastVerified": "2025-11-20" },
+        "public_docs": { "status": "not_disclosed", "note": "No public written terms found.", "sources": [], "lastVerified": "2025-11-20" }
+      }
+    },
+    {
+      "id": "delta-premium",
+      "provider": { "name": "Delta Defense Club", "website": "https://example.com/delta" },
+      "planName": "Premium",
+      "isSponsored": false,
+      "isSample": true,
+      "bestFor": ["Users who want an up-front payment model (when available)", "Those who value hotline + clear process notes"],
+      "notIdealIf": ["You need a plan available in every state", "You want only the cheapest plan"],
+      "actions": [
+        { "id": "visit", "label": "Visit provider site", "url": "https://example.com/delta/premium", "kind": "visit_provider", "isSponsored": false, "whatHappens": "You’ll leave this tool and visit the provider’s site." }
+      ],
+      "availability": { "status": "known", "statesIncluded": ["FL", "GA", "SC", "NC"], "statesExcluded": [], "note": "Sample availability list for MVP demonstration." },
+      "fields": {
+        "monthly_price_usd": { "status": "known", "value": 59.0, "note": "Sample monthly price.", "sources": [{ "title": "Delta pricing", "url": "https://example.com/delta/pricing" }], "lastVerified": "2025-12-05" },
+        "annual_price_usd": { "status": "known", "value": 600.0, "note": "Sample annual price.", "sources": [{ "title": "Delta pricing", "url": "https://example.com/delta/pricing" }], "lastVerified": "2025-12-05" },
+        "payment_model": { "status": "known", "value": "upfront", "note": "Advertises direct payment to attorneys/experts when approved (sample).", "sources": [{ "title": "Delta how it works", "url": "https://example.com/delta/how-it-works" }], "lastVerified": "2025-12-05" },
+        "payment_notes": { "status": "known", "value": "Immediate hotline triage; plan coordinates counsel subject to approval and terms.", "sources": [{ "title": "Delta how it works", "url": "https://example.com/delta/how-it-works" }], "lastVerified": "2025-12-05" },
+        "attorney_choice": { "status": "known", "value": "assigned", "note": "Assigned counsel model (sample).", "sources": [{ "title": "Delta attorneys", "url": "https://example.com/delta/attorneys" }], "lastVerified": "2025-12-05" },
+        "attorney_notes": { "status": "known", "value": "Provider coordinates counsel; member choice may be limited.", "sources": [{ "title": "Delta attorneys", "url": "https://example.com/delta/attorneys" }], "lastVerified": "2025-12-05" },
+        "family_coverage": { "status": "known", "value": "add_on", "note": "Sample classification for MVP dataset.", "sources": [], "lastVerified": "2025-12-05" },
+        "criminal_defense": { "status": "known", "value": "Advertises criminal defense support.", "sources": [{ "title": "Delta premium details", "url": "https://example.com/delta/premium/details" }], "lastVerified": "2025-12-05" },
+        "civil_defense": { "status": "known", "value": "Advertises civil defense support (scope unclear).", "sources": [{ "title": "Delta premium details", "url": "https://example.com/delta/premium/details" }], "lastVerified": "2025-12-05" },
+        "appeals": { "status": "known", "value": "Appeals support available with limits (sample).", "sources": [{ "title": "Delta premium details", "url": "https://example.com/delta/premium/details" }], "lastVerified": "2025-12-05" },
+        "waiting_period": { "status": "not_disclosed", "note": "Waiting period not clearly stated.", "sources": [], "lastVerified": "2025-12-05" },
+        "common_exclusions": { "status": "known", "value": ["Prohibited locations (sample)", "Illegal acts (sample)"], "sources": [{ "title": "Delta terms summary", "url": "https://example.com/delta/terms" }], "lastVerified": "2025-12-05" },
+        "hotline": { "status": "known", "value": "24/7 hotline advertised.", "sources": [{ "title": "Delta contact", "url": "https://example.com/delta/contact" }], "lastVerified": "2025-12-05" },
+        "claim_process_notes": { "status": "known", "value": "Call hotline first; follow provider guidance for counsel and expenses.", "sources": [{ "title": "Delta how it works", "url": "https://example.com/delta/how-it-works" }], "lastVerified": "2025-12-05" },
+        "public_docs": { "status": "known", "value": "Summary terms publicly available (sample).", "sources": [{ "title": "Delta terms summary", "url": "https://example.com/delta/terms" }], "lastVerified": "2025-12-05" }
+      }
+    }
+  ]
+}
+
