@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Concealed Carry Plan Comparison (MVP)</title>
+    <meta
+      name="description"
+      content="Trust-first tool to learn, narrow, and compare concealed carry legal protection plans without giving legal advice."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="container header">
+      <div class="header__top">
+        <div>
+          <h1>Concealed Carry Plan Comparison</h1>
+          <p class="subtle">
+            Educational comparison tool — <strong>not legal advice</strong>. Verify details with providers and policy documents.
+          </p>
+        </div>
+        <div class="header__meta">
+          <div class="pill" id="dataFreshnessPill" aria-live="polite">Loading data…</div>
+          <button class="btn btn--ghost" id="copyShareLinkBtn" type="button">Copy share link</button>
+        </div>
+      </div>
+
+      <div class="disclosure" role="note" aria-label="Disclosure">
+        <strong>Disclosure:</strong>
+        Some outbound links may be sponsored or affiliate links. Sponsored placement is labeled clearly where it appears.
+      </div>
+    </header>
+
+    <main id="main" class="container">
+      <section class="card">
+        <div class="card__header">
+          <h2>Learn the basics (2 minutes)</h2>
+          <p class="subtle">
+            These explainers are designed to help you understand what you’re buying and what questions to ask.
+          </p>
+        </div>
+        <div class="accordion" id="learnAccordion">
+          <details>
+            <summary>Up-front payment vs reimbursement — what’s the difference?</summary>
+            <div class="details__body">
+              <p>
+                <strong>Up-front payment</strong> means the plan/provider may pay covered legal expenses as they happen (subject to
+                terms, limits, and approval).
+              </p>
+              <p>
+                <strong>Reimbursement</strong> means you may need to pay costs first, then seek repayment later if the plan decides
+                the event is covered.
+              </p>
+              <p class="callout">
+                What to ask: “Do you pay attorneys/experts directly or reimburse me later?”, “What approvals are required?”, “What
+                happens if charges are filed?”, “What if I’m convicted or take a plea?”
+              </p>
+              <p class="subtle">
+                This is general educational information; specific policies differ and can change. Always confirm in writing.
+              </p>
+            </div>
+          </details>
+          <details>
+            <summary>Attorney choice — why it matters</summary>
+            <div class="details__body">
+              <p>
+                Some plans let you choose your own attorney (sometimes with conditions), while others assign counsel or require you
+                to use an approved network.
+              </p>
+              <p>
+                In high-stakes cases, attorney experience, local familiarity, and availability can matter. But even “choose your own”
+                plans can have approval, rate, or reimbursement limits.
+              </p>
+              <p class="callout">
+                What to ask: “Can I pick any attorney?”, “Are there hourly caps?”, “Do you pay up-front or reimburse?”, “What if I
+                hire an attorney before notifying you?”
+              </p>
+            </div>
+          </details>
+          <details>
+            <summary>Common exclusions &amp; gotchas (examples)</summary>
+            <div class="details__body">
+              <ul>
+                <li><strong>Intentional/criminal acts exclusions</strong> (coverage may hinge on how the case resolves).</li>
+                <li><strong>Weapons/location restrictions</strong> (e.g., prohibited places, illegal carry circumstances).</li>
+                <li><strong>Waiting periods</strong> (coverage may not apply immediately after signup).</li>
+                <li><strong>Coverage limits</strong> (caps on attorneys, experts, appeals, civil damages, or incident count).</li>
+                <li><strong>Duty to notify / pre-approval</strong> (late notice may reduce or void benefits).</li>
+              </ul>
+              <p class="subtle">
+                This list is illustrative only. Always read the plan’s contract/policy for exact exclusions and conditions.
+              </p>
+            </div>
+          </details>
+          <details>
+            <summary>Known vs unknown (“not disclosed”)</summary>
+            <div class="details__body">
+              <p>
+                This tool will show <strong>Unknown</strong> or <strong>Not disclosed</strong> when public sources don’t clearly state
+                an answer. That’s intentional: it’s more trustworthy than guessing.
+              </p>
+              <p class="callout">
+                Tip: If two plans look similar, prefer the one that discloses details clearly (or provides contract language).
+              </p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="layout">
+        <aside class="card filters" aria-label="Filters">
+          <div class="card__header">
+            <h2>Narrow options</h2>
+            <p class="subtle">Set constraints; results update instantly.</p>
+          </div>
+
+          <div class="field">
+            <label for="stateSelect"><strong>State</strong></label>
+            <select id="stateSelect"></select>
+            <p class="help">Filters by plan availability when known; unknown availability can be included/excluded.</p>
+            <label class="checkbox">
+              <input id="includeUnknownAvailability" type="checkbox" checked />
+              Include plans with unknown state availability
+            </label>
+          </div>
+
+          <div class="field">
+            <label for="maxMonthly"><strong>Max monthly price (USD)</strong></label>
+            <input id="maxMonthly" type="range" min="5" max="150" value="50" step="5" />
+            <div class="row row--between">
+              <div class="subtle">Up to: <span id="maxMonthlyValue">$50</span></div>
+              <label class="checkbox subtle">
+                <input id="includeUnknownPrice" type="checkbox" checked />
+                Include unknown price
+              </label>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="row row--between">
+              <label><strong>Payment model</strong></label>
+              <button class="btn btn--link" type="button" data-clear-group="paymentModel">Clear</button>
+            </div>
+            <div class="chips" id="paymentModelChips"></div>
+          </div>
+
+          <div class="field">
+            <div class="row row--between">
+              <label><strong>Attorney choice</strong></label>
+              <button class="btn btn--link" type="button" data-clear-group="attorneyChoice">Clear</button>
+            </div>
+            <div class="chips" id="attorneyChoiceChips"></div>
+          </div>
+
+          <div class="field">
+            <div class="row row--between">
+              <label><strong>Family coverage</strong></label>
+              <button class="btn btn--link" type="button" data-clear-group="familyCoverage">Clear</button>
+            </div>
+            <div class="chips" id="familyCoverageChips"></div>
+          </div>
+
+          <div class="row row--gap">
+            <button class="btn" id="resetFiltersBtn" type="button">Reset</button>
+            <button class="btn btn--ghost" id="toggleAnalyticsBtn" type="button">Analytics</button>
+          </div>
+        </aside>
+
+        <section class="card results" aria-label="Results">
+          <div class="card__header results__header">
+            <div>
+              <h2>Plans</h2>
+              <p class="subtle" id="resultsSummary">Loading…</p>
+            </div>
+            <div class="compareBar" id="compareBar" hidden>
+              <div class="compareBar__left">
+                <strong>Compare:</strong> <span id="compareCount">0</span>/4 selected
+              </div>
+              <div class="compareBar__right">
+                <button class="btn" id="openCompareBtn" type="button" disabled>Compare selected</button>
+                <button class="btn btn--ghost" id="clearCompareBtn" type="button">Clear</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="resultsList" class="results__list" aria-live="polite"></div>
+        </section>
+      </section>
+
+      <section class="card" id="compareSection" hidden>
+        <div class="card__header">
+          <div class="row row--between">
+            <div>
+              <h2>Side-by-side comparison</h2>
+              <p class="subtle">Grouped by decision themes. Unknowns are explicit.</p>
+            </div>
+            <button class="btn btn--ghost" id="closeCompareBtn" type="button">Close</button>
+          </div>
+        </div>
+        <div id="compareTableWrap" class="compare"></div>
+      </section>
+
+      <section class="card" id="analyticsSection" hidden>
+        <div class="card__header">
+          <div class="row row--between">
+            <div>
+              <h2>Analytics (local)</h2>
+              <p class="subtle">Events are stored in your browser only (localStorage). No network requests.</p>
+            </div>
+            <button class="btn btn--ghost" id="closeAnalyticsBtn" type="button">Close</button>
+          </div>
+        </div>
+        <div class="row row--gap row--wrap">
+          <div class="pill">Events: <span id="eventCount">0</span></div>
+          <button class="btn btn--ghost" id="downloadEventsBtn" type="button">Download events.json</button>
+          <button class="btn btn--ghost" id="clearEventsBtn" type="button">Clear events</button>
+        </div>
+        <pre class="code" id="eventsPreview" aria-label="Event preview"></pre>
+      </section>
+
+      <footer class="footer subtle">
+        <p>
+          Educational tool only. Always consult qualified counsel for legal advice. Plan terms may change; verify directly with the
+          provider and written documents.
+        </p>
+      </footer>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
+
