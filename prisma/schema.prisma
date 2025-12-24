@@ -1,0 +1,118 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PaymentStyle {
+  upfront
+  reimbursement
+  mixed
+  unknown
+}
+
+enum AttorneyChoice {
+  yes
+  limited
+  no
+  unknown
+}
+
+enum CoverageType {
+  criminal
+  civil
+  both
+  unknown
+}
+
+enum FamilyCoverage {
+  yes
+  limited
+  no
+  unknown
+}
+
+model Provider {
+  id              String   @id @default(uuid())
+  name            String
+  slug            String   @unique
+  websiteUrl      String?  @map("website_url")
+  logoUrl         String?  @map("logo_url")
+  summaryShort    String?  @map("summary_short") @db.Text
+  summaryLong     String?  @map("summary_long") @db.Text
+  disclosureNotes String?  @map("disclosure_notes") @db.Text
+  isActive        Boolean  @default(true) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  
+  plans           Plan[]
+
+  @@map("providers")
+}
+
+model Plan {
+  id                  String        @id @default(uuid())
+  providerId          String        @map("provider_id")
+  name                String
+  slug                String        @unique
+  priceMonthly        Float?        @map("price_monthly")
+  priceAnnual         Float?        @map("price_annual")
+  paymentStyle        PaymentStyle  @default(unknown) @map("payment_style")
+  attorneyChoice      AttorneyChoice @default(unknown) @map("attorney_choice")
+  waitingPeriodDays   Int?          @map("waiting_period_days")
+  coverageType        CoverageType  @default(unknown) @map("coverage_type")
+  familyCoverage      FamilyCoverage @default(unknown) @map("family_coverage")
+  coverageNotes       String?       @map("coverage_notes") @db.Text
+  exclusionsNotes     String?      @map("exclusions_notes") @db.Text
+  supportFeatures     Json?        @map("support_features")
+  limitsJson          Json?        @map("limits_json")
+  availabilityJson    Json?        @map("availability_json")
+  affiliateUrl        String?      @map("affiliate_url")
+  ctaLabel            String?      @map("cta_label")
+  isFeatured          Boolean      @default(false) @map("is_featured")
+  sponsoredRankPosition Int?       @map("sponsored_rank_position")
+  overallScore        Float?       @map("overall_score")
+  scoreBreakdownJson  Json?        @map("score_breakdown_json")
+  lastVerifiedAt      DateTime?    @map("last_verified_at")
+  isActive            Boolean      @default(true) @map("is_active")
+  createdAt           DateTime     @default(now()) @map("created_at")
+  updatedAt           DateTime     @updatedAt @map("updated_at")
+  
+  provider            Provider     @relation(fields: [providerId], references: [id])
+  sources             Source[]
+  changeLogs          ChangeLog[]
+
+  @@map("plans")
+}
+
+model Source {
+  id          String   @id @default(uuid())
+  planId      String   @map("plan_id")
+  url         String
+  title       String?
+  note        String?  @db.Text
+  capturedAt  DateTime @default(now()) @map("captured_at")
+  
+  plan        Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@map("sources")
+}
+
+model ChangeLog {
+  id          String   @id @default(uuid())
+  planId      String   @map("plan_id")
+  changedAt   DateTime @default(now()) @map("changed_at")
+  changedBy   String   @map("changed_by")
+  summary     String   @db.Text
+  diffJson    Json?    @map("diff_json")
+  
+  plan        Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@map("change_logs")
+}
