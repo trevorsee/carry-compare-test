@@ -1,0 +1,130 @@
+// Prisma schema for CarryCoverage - Concealed Carry Legal Protection Comparison Site
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Provider - The company offering plans
+model Provider {
+  id              String   @id @default(uuid())
+  name            String
+  slug            String   @unique
+  websiteUrl      String
+  logoUrl         String?
+  summaryShort    String
+  summaryLong     String?
+  disclosureNotes String?
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  plans           Plan[]
+}
+
+// Plan - Individual plans offered by providers
+model Plan {
+  id                    String   @id @default(uuid())
+  providerId            String
+  provider              Provider @relation(fields: [providerId], references: [id])
+  
+  name                  String
+  slug                  String   @unique
+  
+  // Pricing
+  priceMonthly          Float?
+  priceAnnual           Float?
+  
+  // Core coverage attributes
+  paymentStyle          String   // upfront | reimbursement | mixed | unknown
+  attorneyChoice        String   // yes | limited | no | unknown
+  waitingPeriodDays     Int?
+  coverageType          String   // criminal | civil | both | unknown
+  familyCoverage        String   // yes | limited | no | unknown
+  
+  // Detailed notes
+  coverageNotes         String?
+  exclusionsNotes       String?
+  
+  // JSON fields stored as strings
+  supportFeatures       String?
+  limitsJson            String?
+  availabilityJson      String?
+  
+  // Affiliate/CTA
+  affiliateUrl          String?
+  ctaLabel              String   @default("Visit Provider")
+  
+  // Ranking/Featured
+  isFeatured            Boolean  @default(false)
+  sponsoredRankPosition Int?
+  overallScore          Float?
+  scoreBreakdownJson    String?
+  
+  // Verification
+  lastVerifiedAt        DateTime
+  isActive              Boolean  @default(true)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  // TL;DR and marketing
+  bestFor               String?
+  notIdealIf            String?
+  prosJson              String?
+  consJson              String?
+  
+  sources               Source[]
+  changeLogs            ChangeLog[]
+}
+
+// Source - Citations for plan data
+model Source {
+  id         String   @id @default(uuid())
+  planId     String
+  plan       Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+  
+  url        String
+  title      String?
+  note       String?
+  capturedAt DateTime @default(now())
+}
+
+// ChangeLog - Track changes to plans
+model ChangeLog {
+  id        String   @id @default(uuid())
+  planId    String
+  plan      Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+  
+  changedAt DateTime @default(now())
+  changedBy String
+  summary   String
+  diffJson  String?
+}
+
+// Guide - Editorial content pages
+model Guide {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  title       String
+  description String?
+  content     String
+  author      String?
+  publishedAt DateTime?
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  isPublished Boolean  @default(false)
+}
+
+// Admin User for authentication
+model AdminUser {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  role         String   @default("editor")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
